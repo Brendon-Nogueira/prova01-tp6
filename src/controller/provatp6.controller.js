@@ -2,12 +2,12 @@ const service = require('../controller/provatp6.controller')
 
 const create = (req, res) => {
     const movie = req.body
+    if (movie(res, movie)) {
         service.create(movie)
-        if(movie){
-            res.status(201).send('Movie created successfully')
-        } else{
-            res.status(404).send('Invalid data supplied')
-        }
+        res.status(201).send('Movie created')
+    } else{
+        res.status(404).send('Invalid data supplied')
+    }
         
 }
 
