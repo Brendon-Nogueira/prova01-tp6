@@ -1,23 +1,27 @@
-const myDatabase = []
+const myMovies = []
 
-const getAll = () => myDatabase
-
-const create = c => {
-    myDatabase.push(c)
+const create = movie => {
+    myMovies.push(movie)
 }
 
-const update = () => {
-      
+const getAll = () => myMovies
+
+const getById = movieId => myMovies.find(mov => mov.id == movieId)
+
+const update = (movieId, movie) => {
+    const idx = myMovies.findIndex(mov => mov.id == movieId)
+    myMovies[idx] = movie
 }
 
-const remove = r => {
-    
-    myDatabase.splice(index, 1)
+const remove = movieId => {
+    const idx = myMovies.findIndex(mov => mov.id == movieId)
+    myMovies.splice(idx, 1)
 }
 
 module.exports = {
-    getAll,
     create,
+    getAll,
+    getById,
     update,
     remove
 }

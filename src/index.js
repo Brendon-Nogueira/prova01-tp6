@@ -1,5 +1,5 @@
 const express = require('express')
-const router = require('./router/provatp6.router')
+const router = require('./route/provatp6.router')
 
 const app = express()
 app.use(express.json())
