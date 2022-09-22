@@ -1,22 +1,28 @@
-const service = require('../controller/provatp6.controller')
+const service = require('../service/provatp6.service')
 
 const create = (req, res) => {
     const movie = req.body
-    if(validate(res,movie)){
+    if (isBodyValid(res, movie)) {
         service.create(movie)
-        res.status(201).send('My movie created successfully')
-    } else{
-        res.status(404).send('Invalid data supplied')
+        res.status(201).send('Movie created')
     }
-        
+}
+
+const isBodyValid = (res, movie) => {
+    if (!movie.release_year || !movie.description ||
+        !movie.title || !movie.id) {
+        res.status(400).send('Invalid data supplied')
+        return false
+    }
+    return true
 }
 
 const getAll = (req, res) => {
-    res.status(200).send(service.getAll())
+    res.status(200).send(service.getAll())    
 }
 
-const getById = (req, res) => {
-    const movie = service.getById(req.params.id)
+const getMovieById = (req, res) => {
+    const movie = service.getMovieById(req.params.id)
     if (movie) {
         res.status(200).send(movie)
     } else {
@@ -25,11 +31,12 @@ const getById = (req, res) => {
 }
 
 const update = (req, res) => {
-    const movie = service.getById(req.params.id)
+    const movieId = req.params.id
+    const movie = service.getMovieById(movieId)
     if (movie) {
-        if (isValidBody(res, movie)) {
-            service.update(req.params.id, req.body)
-            res.status(200).send('Movie updated successfully')
+        if (isBodyValid(res, req.body)) {
+            service.update(movieId, req.body)
+            res.status(204).send('updated')
         }
     } else {
         res.status(404).send('Movie not found')
@@ -37,27 +44,20 @@ const update = (req, res) => {
 }
 
 const remove = (req, res) => {
-    const movie = service.getById(req.params.id)
+    const movieId = req.params.id
+    const movie = service.getMovieById(movieId)
     if (movie) {
-        service.remove(req.params.id)
-        res.status(204).send('No content')
+        service.remove(movieId)
+        res.status(204).send('deleted')
     } else {
         res.status(404).send('Movie not found')
     }
 }
 
-const validate = (res,movie) =>{
-    if (!movie.id) {
-        res.status(400).send('Id is movie')
-        return false
-    }
-
-    return true
-}
 module.exports = {
     create,
     getAll,
-    getById,
+    getMovieById,
     update,
     remove
 }
